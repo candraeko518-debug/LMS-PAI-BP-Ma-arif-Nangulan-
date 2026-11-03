@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS PAI & Budi Pekerti - Kurikulum Merdeka</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts (Inter & Arabic Amiri) -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.4);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(5, 150, 105, 0.8);
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-200 antialiased flex flex-col md:flex-row md:overflow-hidden">
+
+    <!-- Mobile Header Navigation -->
+    <header class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 z-30">
+        <div class="flex items-center gap-2">
+            <div class="bg-brand-600 text-white p-2 rounded-xl flex items-center justify-center font-bold text-lg">
+                <i class="fa-solid fa-mosque"></i>
+            </div>
+            <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Ruang PAI & BP</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="themeToggleMobile" class="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+            </button>
+            <button id="mobileMenuBtn" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between md:relative">
+        <div class="p-5">
+            <!-- Logo -->
+            <div class="hidden md:flex items-center gap-3 mb-8">
+                <div class="bg-brand-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-none text-slate-900 dark:text-white">PAI & Budi Pekerti</h1>
+                    <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">BSKAP No. 032/H/KR/2024</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="space-y-1.5">
+                <a href="#" data-view="dashboard" class="nav-item flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                    <i class="fa-solid fa-chart-pie w-5"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" data-view="courses" class="nav-item flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                    <i class="fa-solid fa-book-quran w-5"></i>
+                    <span>Materi & ATP BSKAP</span>
+                </a>
+                <a href="#" data-view="assignments" class="nav-item flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                    <i class="fa-solid fa-pen-to-square w-5"></i>
+                    <span>Tugas & Jurnal Saya</span>
+                </a>
+                <a href="#" data-view="my-learning" class="nav-item flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors">
+                    <i class="fa-solid fa-heart-pulse w-5"></i>
+                    <span>Progres Belajar</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer & Theme Toggle -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+            <!-- Login Switcher Button -->
+            <button onclick="openLoginModal()" class="w-full flex items-center justify-between px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-md shadow-emerald-500/20">
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-user-lock"></i>
+                    <span>Login (Guru PAI / Siswa)</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            </button>
+
+            <button id="themeToggleDesktop" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors text-sm font-medium">
+                <span class="flex items-center gap-2">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                    <span id="themeLabel">Mode Gelap</span>
+                </span>
+                <div class="w-8 h-4 bg-slate-300 dark:bg-brand-600 rounded-full relative transition-colors">
+                    <div class="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 dark:left-4 transition-all"></div>
+                </div>
+            </button>
+
+            <!-- User Profile Card -->
+            <div class="flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-700/40 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+                <img id="userAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
+                <div class="overflow-hidden">
+                    <h4 id="userName" class="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">Siti Rahma</h4>
+                    <p id="userRoleTitle" class="text-xs text-slate-500 dark:text-slate-400 truncate">Siswa SMA - Fase E</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for Mobile Sidebar -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/50 z-30 hidden md:hidden"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto h-full p-4 md:p-8 space-y-6">
+
+        <!-- DASHBOARD VIEW (STUDENT) -->
+        <section id="view-dashboard" class="app-view space-y-6">
+            <!-- Welcome Banner -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-800 p-6 md:p-8 text-white shadow-xl shadow-brand-500/10">
+                <div class="relative z-10 max-w-xl space-y-2">
+                    <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase">Profil Pelajar Pancasila</span>
+                    <h2 class="text-2xl md:text-3xl font-bold">Assalamu’alaikum, Siti Rahma! 🌿</h2>
+                    <p class="text-emerald-100 text-sm md:text-base">Mari lanjutkan pembelajaran PAI & Budi Pekerti berbasis karakter dan penerapan kehidupan sehari-hari.</p>
+                </div>
+                <i class="fa-solid fa-hands-praying absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12 pointer-events-none"></i>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl">
+                        <i class="fa-solid fa-book-open-reader text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Modul Diikuti</p>
+                        <h3 class="text-xl font-bold mt-0.5 text-slate-800 dark:text-slate-100" id="statEnrolledCount">2</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3.5 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl">
+                        <i class="fa-solid fa-seedling text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Jurnal Budi Pekerti</p>
+                        <h3 class="text-xl font-bold mt-0.5 text-slate-800 dark:text-slate-100">12 Aksi</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
+                        <i class="fa-solid fa-award text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Capaian Pembelajaran</p>
+                        <h3 class="text-xl font-bold mt-0.5 text-slate-800 dark:text-slate-100">Fase E Tuntas</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm flex items-center gap-4">
+                    <div class="p-3.5 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl">
+                        <i class="fa-solid fa-feather-pointed text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Rata-rata Refleksi</p>
+                        <h3 class="text-xl font-bold mt-0.5 text-slate-800 dark:text-slate-100" id="statAvgQuiz">95%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Progress Courses -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Materi PAI & BP Yang Sedang Dipelajari</h3>
+                    <button onclick="switchView('my-learning')" class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">Lihat Semua</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="dashboardActiveCourses">
+                    <!-- Dynamic rendering by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- COURSE CATALOG VIEW -->
+        <section id="view-courses" class="app-view space-y-6 hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Modul PAI & BP Sesuai Standar BSKAP Terbaru</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Diselaraskan dengan Alur Tujuan Pembelajaran (ATP) Capaian Pembelajaran Revisi BSKAP 032/H/KR/2024</p>
+                </div>
+
+                <!-- Filters & Search -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="searchInput" placeholder="Cari ATP / Kata Kunci CP..." class="w-full sm:w-64 pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <select id="categoryFilter" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        <option value="all">Semua Fase BSKAP</option>
+                        <option value="fase-e">Fase E (Kelas X SMA/SMK)</option>
+                        <option value="fase-f">Fase F (Kelas XI & XII SMA/SMK)</option>
+                        <option value="fase-d">Fase D (Kelas VII-IX SMP)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Course Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courseCatalogGrid">
+                <!-- Dynamically Inserted -->
+            </div>
+        </section>
+
+        <!-- MY LEARNING VIEW -->
+        <section id="view-my-learning" class="app-view space-y-6 hidden">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Jurnal & Pembelajaran Aktif Saya</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Daftar pembelajaran PAI & Budi Pekerti yang kamu ikuti</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="myLearningGrid">
+                <!-- Dynamically Inserted -->
+            </div>
+        </section>
+
+        <!-- ANALYTICS VIEW -->
+        <section id="view-analytics" class="app-view space-y-6 hidden">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Capaian 5 Elemen PAI & Budi Pekerti</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">Perkembangan pemahaman berdasarkan elemen Kurikulum Merdeka</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100">Aktivitas Refleksi & Pemahaman (Jam)</h3>
+                    <div class="h-64 relative">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100">Proporsi Capaian Elemen</h3>
+                    <div class="h-64 relative flex items-center justify-center">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASSIGNMENTS VIEW (STUDENT & GURU) -->
+        <section id="view-assignments" class="app-view space-y-6 hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Daftar Tugas & Jurnal Budi Pekerti</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Kirim lembar kerja, dokumentasi foto, dan jurnal refleksi harian PAI</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Task List -->
+                <div class="lg:col-span-2 space-y-4" id="assignmentListContainer">
+                    <!-- Dynamic rendering by JS -->
+                </div>
+
+                <!-- Submit Assignment Side Card -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4 h-fit">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base" id="submitCardTitle">Form Pengumpulan Tugas</h3>
+                    <p class="text-xs text-slate-500" id="submitCardSub">Pilih salah satu tugas di samping untuk mengunggah jawaban & bukti foto.</p>
+                    
+                    <form id="studentSubmitForm" onsubmit="handleStudentSubmitTask(event)" class="space-y-4 hidden">
+                        <input type="hidden" id="submitTaskId">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Catatan / Jawaban Refleksi</label>
+                            <textarea id="submitTextContent" rows="4" required placeholder="Tuliskan refleksi atau deskripsi kegiatan kamu..." class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Lampiran Gambar/Foto Bukti (URL)</label>
+                            <input type="url" id="submitImageURL" placeholder="https://images.unsplash.com/... atau tautan gambar" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <span class="text-[10px] text-slate-400">Dapat berisi foto kegiatan pembiasaan, infografis, atau rangkuman.</span>
+                        </div>
+                        <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-md shadow-emerald-500/20 transition-colors">
+                            <i class="fa-solid fa-paper-plane mr-1"></i> Kirim Tugas Ini
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN DASHBOARD VIEW (GURU PAI) -->
+        <section id="view-admin-dashboard" class="app-view space-y-6 hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Manajemen ATP & Penilaian Guru PAI</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">Kelola Tugas, Buku Nilai Siswa, dan ATP PAI & Budi Pekerti BSKAP</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openAddAssignmentModal()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-amber-500/20">
+                        <i class="fa-solid fa-file-pen"></i> Buat Tugas Baru
+                    </button>
+                    <button onclick="openAddStudentModal()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-blue-500/20">
+                        <i class="fa-solid fa-user-plus"></i> Tambah Siswa Baru
+                    </button>
+                    <button onclick="openAddCourseModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-plus"></i> Buat Modul ATP
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submissions to Grade (Buku Nilai Guru) -->
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base"><i class="fa-solid fa-clipboard-check text-emerald-600 mr-2"></i>Buku Nilai & Pengumpulan Tugas Siswa</h3>
+                    <span class="text-xs text-slate-400">Periksa foto bukti & berikan nilai</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 text-xs uppercase">
+                            <tr>
+                                <th class="p-3.5 rounded-l-xl">Nama Siswa</th>
+                                <th class="p-3.5">Judul Tugas</th>
+                                <th class="p-3.5">Bukti Gambar</th>
+                                <th class="p-3.5">Jawaban / Catatan</th>
+                                <th class="p-3.5">Nilai Status</th>
+                                <th class="p-3.5 text-right rounded-r-xl">Aksi Penilaian</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminGradingTableBody" class="divide-y divide-slate-200 dark:divide-slate-700">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Student Management Table -->
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-100">Daftar Siswa & Progres Belajar</h3>
+                    <button onclick="openAddStudentModal()" class="text-xs font-semibold text-blue-600 hover:underline">+ Tambah Siswa</button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 text-xs uppercase">
+                            <tr>
+                                <th class="p-3.5 rounded-l-xl">Nama Siswa / NISN</th>
+                                <th class="p-3.5">Kelas & Fase</th>
+                                <th class="p-3.5">Modul Diikuti</th>
+                                <th class="p-3.5">Capaian Jurnal</th>
+                                <th class="p-3.5 text-right rounded-r-xl">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminStudentTableBody" class="divide-y divide-slate-200 dark:divide-slate-700">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    <!-- LOGIN SELECTION MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Login & Pilih Akun Pengguna</h3>
+                <button onclick="closeLoginModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <p class="text-xs text-slate-500">Pilih salah satu akun terdaftar di bawah ini untuk mensimulasikan login siswa atau guru:</p>
+
+            <div class="space-y-2 max-h-80 overflow-y-auto pr-1" id="loginAccountsList">
+                <!-- Dynamically Inserted Users -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD ASSIGNMENT MODAL (GURU) -->
+    <div id="addAssignmentModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Buat Tugas / Jurnal PAI Baru</h3>
+                <button onclick="closeAddAssignmentModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <form id="addAssignmentForm" onsubmit="handleCreateAssignment(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Judul Tugas / Aktivitas</label>
+                    <input type="text" id="newAssignTitle" required placeholder="Misal: Jurnal Foto Pembiasaan Shalat Jamaah & Tabayyun" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Tenggat Waktu (Due Date)</label>
+                        <input type="date" id="newAssignDueDate" required class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Skor Maksimal</label>
+                        <input type="number" id="newAssignMaxScore" value="100" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Instruksi & Petunjuk Tugas</label>
+                    <textarea id="newAssignInstructions" rows="3" required placeholder="Tuliskan petunjuk pengerjaan tugas dan foto bukti yang harus dilampirkan..." class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeAddAssignmentModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl text-xs">Terbitkan Tugas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD MODULE MODAL (ADMIN) -->
+    <div id="addModuleModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Tambah Sub-Topik / Aktivitas</h3>
+                <button onclick="closeAddModuleModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <form id="addModuleForm" onsubmit="handleCreateModule(event)" class="space-y-4">
+                <input type="hidden" id="targetCourseId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Judul Sub-Topik</label>
+                    <input type="text" id="newModuleTitle" required placeholder="Misal: Studi Kasus Etika Digital & Tabayyun" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeAddModuleModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs">Simpan Sub-Topik</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD STUDENT MODAL (ADMIN) -->
+    <div id="addStudentModal" class="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-3">
+                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Tambah Siswa Baru</h3>
+                <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <form id="addStudentForm" onsubmit="handleCreateStudent(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Lengkap Siswa</label>
+                    <input type="text" id="newStudentName" required placeholder="Misal: Ahmad Zaky" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">NISN / ID Siswa</label>
+                        <input type="text" id="newStudentNisn" required placeholder="0051234567" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Kelas & Fase</label>
+                        <select id="newStudentClass" class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="Kelas X (Fase E)">Kelas X (Fase E)</option>
+                            <option value="Kelas XI (Fase F)">Kelas XI (Fase F)</option>
+                            <option value="Kelas XII (Fase F)">Kelas XII (Fase F)</option>
+                            <option value="Kelas VII (Fase D)">Kelas VII (Fase D)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Foto Profil (URL Gambar)</label>
+                    <input type="url" id="newStudentAvatar" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeAddStudentModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-xs">Simpan Siswa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm border border-slate-700">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMsg">Notifikasi</span>
+    </div>
+
+    <script>
+        // Data contoh untuk demonstrasi LMS. Data tersimpan di browser melalui localStorage.
+        const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80';
+        const teacherUser = {
+            id: 't1', name: 'Candra Eko Prabowo, S.Pd.I', role: 'admin',
+            classFase: 'Guru PAI & Budi Pekerti',
+            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80'
+        };
+        let currentUser = {
+            id: 's1', name: 'Siti Rahma', role: 'student',
+            classFase: 'Kelas X (Fase E)', avatar: DEFAULT_AVATAR
+        };
+        let currentRole = 'student';
+
+        const defaultStudents = [{
+            id: 's1', name: 'Siti Rahma', nisn: '0051234567',
+            classFase: 'Kelas X (Fase E)', avatar: DEFAULT_AVATAR,
+            enrolled: ['c1'], journalCount: 12
+        }];
+        const defaultCourses = [
+            { id:'c1', title:'Syu’abul Iman dan Aktualisasi Iman', phase:'fase-e',
+              classLabel:'Fase E', element:'Akidah', description:'Memahami cabang-cabang iman dan penerapannya dalam kehidupan sehari-hari.',
+              modules:['Pengertian Syu’ab al-Imān','Cabang-cabang Iman, Islam, dan Ihsan','Keterkaitan Iman, Islam, dan Ihsan'] },
+            { id:'c2', title:'Tabayyun dan Etika Digital', phase:'fase-f',
+              classLabel:'Fase F', element:'Al-Qur’an Hadis', description:'Menganalisis prinsip tabayyun dan tanggung jawab bermedia digital.',
+              modules:['Makna tabayyun','Analisis informasi digital','Praktik etika bermedia'] },
+            { id:'c3', title:'Muamalah dan Keuangan Syariah', phase:'fase-f',
+              classLabel:'Fase F', element:'Fikih', description:'Mengenali prinsip muamalah dan penerapannya dalam transaksi kontemporer.',
+              modules:['Prinsip dasar muamalah','Transaksi digital','Studi kasus keuangan syariah'] }
+        ];
+        let studentsData = loadData('lms_students', defaultStudents);
+        let coursesData = loadData('lms_courses', defaultCourses);
+        let assignmentsData = loadData('lms_assignments', [
+            { id:'asg-1', title:'Jurnal Foto Refleksi Tabayyun & Etika Digital', dueDate:'2026-11-10', maxScore:100,
+              instructions:'Buat rangkuman singkat dan unggah tautan foto bukti penerapan tabayyun terhadap informasi yang kamu terima.' },
+            { id:'asg-2', title:'Laporan Analisis Muamalah & Fintech Syariah', dueDate:'2026-11-15', maxScore:100,
+              instructions:'Analisis salah satu layanan transaksi digital berdasarkan prinsip muamalah syariah.' }
+        ]);
+        let submissionsData = loadData('lms_submissions', [
+            { id:'sub-1', assignmentId:'asg-1', studentId:'s1', studentName:'Siti Rahma',
+              textContent:'Saya mengecek berita seputar ujian melalui sumber resmi sekolah sebelum menyebarkannya.',
+              imageUrl:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=400&q=80',
+              submittedAt:'2026-11-01', score:95, feedback:'Sangat baik dan kritis dalam menyaring berita!' }
+        ]);
+
+        function loadData(key, fallback) {
+            try {
+                const saved = localStorage.getItem(key);
+                return saved ? JSON.parse(saved) : structuredClone(fallback);
+            } catch (error) {
+                console.warn('Data lokal tidak dapat dibaca:', key, error);
+                return structuredClone(fallback);
+            }
+        }
+        function saveData() {
+            try {
+                localStorage.setItem('lms_students', JSON.stringify(studentsData));
+                localStorage.setItem('lms_courses', JSON.stringify(coursesData));
+                localStorage.setItem('lms_assignments', JSON.stringify(assignmentsData));
+                localStorage.setItem('lms_submissions', JSON.stringify(submissionsData));
+            } catch (error) {
+                console.warn('Data tidak dapat disimpan di browser:', error);
+                showToast('Perubahan hanya tersimpan sementara di halaman ini.');
+            }
+        }
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+            })[ch]);
+        }
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toastMsg');
+            if (!toast || !msg) return;
+            msg.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            clearTimeout(window.__toastTimer);
+            window.__toastTimer = setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2600);
+        }
+
+        function switchView(viewName) {
+            const allowed = ['dashboard','courses','assignments','my-learning','analytics','admin-dashboard'];
+            if (!allowed.includes(viewName)) return;
+            document.querySelectorAll('.app-view').forEach(view => view.classList.add('hidden'));
+            const target = document.getElementById('view-' + viewName);
+            if (target) target.classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(link => {
+                const active = link.dataset.view === viewName;
+                link.classList.toggle('bg-emerald-50', active);
+                link.classList.toggle('dark:bg-emerald-900/30', active);
+                link.classList.toggle('text-emerald-700', active);
+                link.classList.toggle('dark:text-emerald-300', active);
+            });
+            if (viewName === 'courses') renderCourseCatalog();
+            if (viewName === 'my-learning') renderMyLearning();
+            if (viewName === 'assignments') renderAssignmentsView();
+            if (viewName === 'admin-dashboard') renderAdminDashboard();
+            closeMobileMenu();
+        }
+        function closeMobileMenu() {
+            document.getElementById('sidebar')?.classList.add('-translate-x-full');
+            document.getElementById('sidebarOverlay')?.classList.add('hidden');
+        }
+
+        // Navigasi dan tema
+        document.querySelectorAll('.nav-item').forEach(link => link.addEventListener('click', event => {
+            event.preventDefault();
+            const view = link.dataset.view;
+            if (currentRole === 'student' && view === 'admin-dashboard') return;
+            switchView(view);
+        }));
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('lms_theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+        if (localStorage.getItem('lms_theme') === 'dark') document.documentElement.classList.add('dark');
+        document.getElementById('themeToggleMobile')?.addEventListener('click', toggleTheme);
+        document.getElementById('themeToggleDesktop')?.addEventListener('click', toggleTheme);
+        document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('-translate-x-full');
+            document.getElementById('sidebarOverlay').classList.remove('hidden');
+        });
+        document.getElementById('sidebarOverlay')?.addEventListener('click', closeMobileMenu);
+
+        // Login simulasi: bukan autentikasi aman untuk data sekolah sungguhan.
+        function openLoginModal() {
+            const list = document.getElementById('loginAccountsList');
+            const users = [teacherUser, ...studentsData.map(student => ({
+                ...student, role:'student'
+            }))];
+            list.innerHTML = users.map(user => `
+                <button type="button" onclick="loginAsUser('${escapeHTML(user.id)}')"
+                    class="w-full text-left flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors">
+                    <span class="flex items-center gap-3">
+                        <img src="${escapeHTML(user.avatar || DEFAULT_AVATAR)}" alt="" class="w-9 h-9 rounded-full object-cover">
+                        <span><strong class="block text-sm">${escapeHTML(user.name)}</strong>
+                        <small class="text-xs text-slate-400">${escapeHTML(user.classFase)}</small></span>
+                    </span>
+                    <span class="text-[10px] px-2 py-1 rounded-full font-bold ${user.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">${user.role === 'admin' ? 'GURU PAI' : 'SISWA'}</span>
+                </button>`).join('');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        function loginAsUser(userId) {
+            if (userId === 't1') {
+                currentUser = teacherUser;
+                currentRole = 'admin';
+            } else {
+                const student = studentsData.find(item => item.id === userId);
+                if (!student) return;
+                currentUser = { ...student, role:'student' };
+                currentRole = 'student';
+            }
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRoleTitle').textContent = currentUser.classFase;
+            document.getElementById('userAvatar').src = currentUser.avatar || DEFAULT_AVATAR;
+            closeLoginModal();
+            showToast(`Berhasil masuk sebagai ${currentUser.name}`);
+            switchView(currentRole === 'admin' ? 'admin-dashboard' : 'dashboard');
+        }
+
+        // Modul dan katalog pembelajaran
+        function renderCourseCatalog() {
+            const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const phase = document.getElementById('categoryFilter')?.value || 'all';
+            const filtered = coursesData.filter(course =>
+                (phase === 'all' || course.phase === phase) &&
+                [course.title, course.element, course.description, ...(course.modules || [])].join(' ').toLowerCase().includes(query)
+            );
+            const grid = document.getElementById('courseCatalogGrid');
+            grid.innerHTML = filtered.length ? filtered.map(course => `
+                <article class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                    <div class="flex justify-between gap-2"><span class="text-xs font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg">${escapeHTML(course.classLabel)}</span>
+                    <span class="text-xs text-slate-400">${escapeHTML(course.element)}</span></div>
+                    <h3 class="font-bold text-slate-800 dark:text-white">${escapeHTML(course.title)}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">${escapeHTML(course.description)}</p>
+                    <div class="text-xs text-slate-500">${(course.modules || []).length} sub-topik</div>
+                    <button onclick="openAddModuleModal('${escapeHTML(course.id)}')" class="text-sm font-semibold text-emerald-600 hover:underline">Kelola sub-topik / lihat materi</button>
+                    <ol class="list-decimal pl-5 text-xs text-slate-500 space-y-1">${(course.modules || []).map(module => `<li>${escapeHTML(module)}</li>`).join('')}</ol>
+                </article>`).join('') : '<p class="text-sm text-slate-500">Materi tidak ditemukan.</p>';
+        }
+        function renderMyLearning() {
+            const enrolled = coursesData.filter(course => (currentUser.enrolled || ['c1']).includes(course.id));
+            document.getElementById('myLearningGrid').innerHTML = enrolled.map(course => `
+                <article class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                    <span class="text-xs text-emerald-600 font-semibold">${escapeHTML(course.classLabel)} • ${escapeHTML(course.element)}</span>
+                    <h3 class="font-bold">${escapeHTML(course.title)}</h3><p class="text-sm text-slate-500">${escapeHTML(course.description)}</p>
+                    <p class="text-xs text-slate-400">${(course.modules || []).length} sub-topik tersedia</p>
+                </article>`).join('') || '<p class="text-sm text-slate-500">Belum ada modul yang diikuti.</p>';
+        }
+        document.getElementById('searchInput')?.addEventListener('input', renderCourseCatalog);
+        document.getElementById('categoryFilter')?.addEventListener('change', renderCourseCatalog);
+        function openAddModuleModal(courseId) {
+            document.getElementById('targetCourseId').value = courseId;
+            document.getElementById('addModuleModal').classList.remove('hidden');
+        }
+        function closeAddModuleModal() {
+            document.getElementById('addModuleModal').classList.add('hidden');
+            document.getElementById('addModuleForm').reset();
+        }
+        function handleCreateModule(event) {
+            event.preventDefault();
+            const course = coursesData.find(item => item.id === document.getElementById('targetCourseId').value);
+            const title = document.getElementById('newModuleTitle').value.trim();
+            if (!course || !title) return;
+            course.modules = course.modules || [];
+            course.modules.push(title);
+            saveData(); closeAddModuleModal(); renderCourseCatalog();
+            showToast('Sub-topik berhasil ditambahkan.');
+        }
+        function openAddCourseModal() {
+            const title = prompt('Masukkan judul modul / ATP baru:');
+            if (title === null || !title.trim()) return;
+            const phaseInput = prompt('Pilih fase: ketik E atau F.', 'F');
+            if (phaseInput === null) return;
+            const phase = phaseInput.trim().toUpperCase() === 'E' ? 'fase-e' : 'fase-f';
+            const id = 'c-' + Date.now();
+            coursesData.push({
+                id, title:title.trim(), phase,
+                classLabel:phase === 'fase-e' ? 'Fase E' : 'Fase F',
+                element:'Belum ditentukan',
+                description:'Modul ATP baru. Lengkapi deskripsi dan sub-topik sesuai kebutuhan pembelajaran.',
+                modules:[]
+            });
+            saveData();
+            renderAdminDashboard();
+            renderCourseCatalog();
+            showToast('Modul ATP baru berhasil dibuat.');
+        }
+
+        // Tugas, pengumpulan, dan penilaian
+        function renderAssignmentsView() {
+            const container = document.getElementById('assignmentListContainer');
+            container.innerHTML = assignmentsData.map(task => {
+                const submission = submissionsData.find(item => item.assignmentId === task.id && item.studentId === currentUser.id);
+                return `<article class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between gap-2"><span class="text-xs font-semibold text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-md">Tenggat: ${escapeHTML(task.dueDate)}</span>
+                    <span class="text-xs font-bold ${submission ? 'text-emerald-600' : 'text-slate-400'}">${submission ? (submission.score !== null ? 'Nilai: ' + submission.score : 'Sudah dikirim') : 'Belum dikirim'}</span></div>
+                    <h3 class="font-bold">${escapeHTML(task.title)}</h3><p class="text-xs text-slate-500">${escapeHTML(task.instructions)}</p>
+                    ${submission ? `<div class="p-3 bg-slate-50 dark:bg-slate-700/40 rounded-xl space-y-2 text-xs"><p><strong>Jawaban:</strong> ${escapeHTML(submission.textContent)}</p>
+                    ${submission.imageUrl ? `<a href="${escapeHTML(submission.imageUrl)}" target="_blank" rel="noopener">Lihat lampiran</a>` : ''}
+                    ${submission.feedback ? `<p class="text-emerald-600"><strong>Umpan balik:</strong> ${escapeHTML(submission.feedback)}</p>` : ''}</div>`
+                    : currentRole === 'student' ? `<button onclick="selectAssignmentForSubmit('${escapeHTML(task.id)}')" class="py-2 px-4 bg-emerald-600 text-white text-xs rounded-xl">Kerjakan / Kirim Tugas</button>` : ''}
+                </article>`;
+            }).join('') || '<p class="text-sm text-slate-500">Belum ada tugas.</p>';
+        }
+        function selectAssignmentForSubmit(taskId) {
+            const task = assignmentsData.find(item => item.id === taskId);
+            if (!task) return;
+            document.getElementById('submitTaskId').value = task.id;
+            document.getElementById('submitCardTitle').textContent = 'Kirim: ' + task.title;
+            document.getElementById('submitCardSub').textContent = `Tenggat: ${task.dueDate} • Skor maksimal: ${task.maxScore}`;
+            document.getElementById('studentSubmitForm').classList.remove('hidden');
+        }
+        function handleStudentSubmitTask(event) {
+            event.preventDefault();
+            if (currentRole !== 'student') { showToast('Silakan masuk sebagai siswa.'); return; }
+            const taskId = document.getElementById('submitTaskId').value;
+            if (submissionsData.some(item => item.assignmentId === taskId && item.studentId === currentUser.id)) {
+                showToast('Tugas ini sudah dikirim.'); return;
+            }
+            submissionsData.push({
+                id:'sub-' + Date.now(), assignmentId:taskId, studentId:currentUser.id,
+                studentName:currentUser.name, textContent:document.getElementById('submitTextContent').value.trim(),
+                imageUrl:document.getElementById('submitImageURL').value.trim(),
+                submittedAt:new Date().toISOString().slice(0,10), score:null, feedback:''
+            });
+            saveData();
+            document.getElementById('studentSubmitForm').reset();
+            document.getElementById('studentSubmitForm').classList.add('hidden');
+            showToast('Tugas berhasil dikirim pada perangkat ini.');
+            renderAssignmentsView();
+        }
+        function openAddAssignmentModal() { document.getElementById('addAssignmentModal').classList.remove('hidden'); }
+        function closeAddAssignmentModal() {
+            document.getElementById('addAssignmentModal').classList.add('hidden');
+            document.getElementById('addAssignmentForm').reset();
+        }
+        function handleCreateAssignment(event) {
+            event.preventDefault();
+            assignmentsData.unshift({
+                id:'asg-' + Date.now(),
+                title:document.getElementById('newAssignTitle').value.trim(),
+                dueDate:document.getElementById('newAssignDueDate').value,
+                maxScore:Number(document.getElementById('newAssignMaxScore').value) || 100,
+                instructions:document.getElementById('newAssignInstructions').value.trim()
+            });
+            saveData(); closeAddAssignmentModal(); renderAdminDashboard();
+            showToast('Tugas baru berhasil diterbitkan di perangkat ini.');
+        }
+        function renderAdminGradingTable() {
+            const body = document.getElementById('adminGradingTableBody');
+            body.innerHTML = submissionsData.length ? submissionsData.map(sub => {
+                const task = assignmentsData.find(item => item.id === sub.assignmentId);
+                return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30">
+                    <td class="p-3.5 font-semibold">${escapeHTML(sub.studentName)}</td>
+                    <td class="p-3.5 text-xs">${escapeHTML(task?.title || 'Tugas')}</td>
+                    <td class="p-3.5">${sub.imageUrl ? `<a href="${escapeHTML(sub.imageUrl)}" target="_blank" rel="noopener">Lihat foto</a>` : '<span class="text-xs text-slate-400">Tanpa foto</span>'}</td>
+                    <td class="p-3.5 text-xs max-w-xs">${escapeHTML(sub.textContent)}</td>
+                    <td class="p-3.5 text-xs">${sub.score !== null ? 'Nilai: ' + sub.score : 'Belum dinilai'}</td>
+                    <td class="p-3.5 text-right"><button onclick="gradeSubmission('${escapeHTML(sub.id)}')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs">Beri Nilai</button></td>
+                </tr>`;
+            }).join('') : '<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada siswa yang mengumpulkan tugas.</td></tr>';
+        }
+        function gradeSubmission(submissionId) {
+            const sub = submissionsData.find(item => item.id === submissionId);
+            if (!sub) return;
+            const raw = prompt('Masukkan nilai siswa (0–100):', sub.score ?? 90);
+            if (raw === null) return;
+            const score = Number(raw);
+            if (!Number.isInteger(score) || score < 0 || score > 100) {
+                alert('Nilai harus berupa bilangan bulat 0 sampai 100.'); return;
+            }
+            const feedback = prompt('Masukkan umpan balik guru:', sub.feedback || '');
+            if (feedback === null) return;
+            sub.score = score; sub.feedback = feedback;
+            saveData(); renderAdminDashboard(); showToast('Nilai berhasil disimpan.');
+        }
+
+        // Manajemen siswa
+        function openAddStudentModal() { document.getElementById('addStudentModal').classList.remove('hidden'); }
+        function closeAddStudentModal() {
+            document.getElementById('addStudentModal').classList.add('hidden');
+            document.getElementById('addStudentForm').reset();
+        }
+        function handleCreateStudent(event) {
+            event.preventDefault();
+            const nisn = document.getElementById('newStudentNisn').value.trim();
+            if (studentsData.some(student => student.nisn === nisn || student.id === nisn)) {
+                alert('NISN/ID siswa sudah terdaftar.'); return;
+            }
+            studentsData.push({
+                id:'s-' + Date.now(), name:document.getElementById('newStudentName').value.trim(),
+                nisn, classFase:document.getElementById('newStudentClass').value,
+                avatar:document.getElementById('newStudentAvatar').value.trim() || DEFAULT_AVATAR,
+                enrolled:['c1'], journalCount:0
+            });
+            saveData(); closeAddStudentModal(); renderAdminDashboard();
+            showToast('Data siswa berhasil ditambahkan di perangkat ini.');
+        }
+        function renderAdminDashboard() {
+            renderAdminGradingTable();
+            const body = document.getElementById('adminStudentTableBody');
+            body.innerHTML = studentsData.map(student => `<tr>
+                <td class="p-3.5"><strong>${escapeHTML(student.name)}</strong><div class="text-xs text-slate-400">${escapeHTML(student.nisn || '-')}</div></td>
+                <td class="p-3.5 text-xs">${escapeHTML(student.classFase)}</td>
+                <td class="p-3.5 text-xs">${(student.enrolled || []).length} modul</td>
+                <td class="p-3.5 text-xs">${student.journalCount || 0} aktivitas</td>
+                <td class="p-3.5 text-right"><button onclick="deleteStudent('${escapeHTML(student.id)}')" class="text-red-600 text-xs">Hapus</button></td>
+            </tr>`).join('');
+        }
+        function deleteStudent(studentId) {
+            if (studentId === 's1') { alert('Akun contoh utama tidak dapat dihapus.'); return; }
+            if (!confirm('Hapus data siswa ini?')) return;
+            studentsData = studentsData.filter(student => student.id !== studentId);
+            saveData(); renderAdminDashboard(); showToast('Data siswa dihapus.');
+        }
+
+        // Ringkasan dashboard dan inisialisasi
+        function renderDashboard() {
+            document.getElementById('statEnrolledCount').textContent = (currentUser.enrolled || ['c1','c2']).length;
+            document.getElementById('dashboardActiveCourses').innerHTML = coursesData.slice(0,3).map(course => `
+                <article class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                    <span class="text-xs text-emerald-600 font-semibold">${escapeHTML(course.classLabel)} • ${escapeHTML(course.element)}</span>
+                    <h3 class="font-bold">${escapeHTML(course.title)}</h3><p class="text-xs text-slate-500">${escapeHTML(course.description)}</p>
+                    <button onclick="switchView('courses')" class="text-xs text-emerald-600 font-semibold">Buka materi</button>
+                </article>`).join('');
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+            renderAssignmentsView();
+            if (typeof Chart !== 'undefined') {
+                const weekly = document.getElementById('weeklyChart');
+                const category = document.getElementById('categoryChart');
+                if (weekly) new Chart(weekly, {type:'bar', data:{labels:['Sen','Sel','Rab','Kam','Jum','Sab','Min'], datasets:[{label:'Jam belajar',data:[1,1.5,1,2,1.5,2,1],backgroundColor:'#10b981'}]}, options:{responsive:true, maintainAspectRatio:false}});
+                if (category) new Chart(category, {type:'doughnut', data:{labels:['Al-Qur’an Hadis','Akidah','Akhlak','Fikih','Sejarah'], datasets:[{data:[20,20,20,20,20],backgroundColor:['#10b981','#f59e0b','#3b82f6','#8b5cf6','#14b8a6']}]}, options:{responsive:true, maintainAspectRatio:false}});
+            }
+        });
+    </script>
+</body>
+</html>
